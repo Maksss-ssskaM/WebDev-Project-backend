@@ -38,6 +38,6 @@ export class AuthService {
         }
         const token = await this.tokenService.generateJwtToken(userData)
         const  user = await this.userService.publicUser(dto.email)
-        return {...user, token}
+        return {user, token}
     }
 }
