@@ -2,8 +2,8 @@ import {BadRequestException, Injectable} from '@nestjs/common';
 import { InjectModel } from "@nestjs/sequelize";
 import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
-import {CreateUserDTO} from "./dto";
-import {AppError} from "../../common/errors";
+import {CreateUserDTO, UpdateUserDTO} from "./dto";
+import {AppError} from "../../common/constants/errors";
 
 @Injectable()
 export class UsersService {
@@ -24,12 +24,6 @@ export class UsersService {
     // добавление нового пользователя в БД
     async createUser(dto: CreateUserDTO): Promise<CreateUserDTO> {
 
-        // Если пользователь уже существует
-        const existUser = await this.findUserByEmail(dto.email)
-        if(existUser) {
-            throw new BadRequestException(AppError.USER_EXIST)
-        }
-
         dto.password = await this.hashPassword(dto.password)
         const newUser = {
             firstName: dto.firstName,
@@ -40,4 +34,28 @@ export class UsersService {
         await this.userRepository.create(newUser)
         return dto
     }
+
+    // ищет юзера по email, который уже есть в БД, но исключаем пароль из данных, которые возвраащем
+    async publicUser (email: string) {
+        return this.userRepository.findOne({
+            where: { email: email },
+            attributes: {exclude: ['password']}
+        })
+    }
+
+    // метод, обновляющий пользователя
+    async updateUser (email: string, dto: UpdateUserDTO): Promise<UpdateUserDTO>{
+        await this.userRepository.update(dto, {where: {email}})
+        return dto
+    }
+    // метод, удаляющий пользователя
+    async  deleteUser(email: string) {
+        await this.userRepository.destroy({where: {email}})
+        return true
+    }
+
+    // Когда пользователь авторизован, у него есть токен доступа.
+    // По данному токену доступа будет определён объект пользователя.
+    // Из этого объекта доступа будет получен электронный адрес.
+    // С помощью этого электронного адреса будет удалена запись из бд
 }
