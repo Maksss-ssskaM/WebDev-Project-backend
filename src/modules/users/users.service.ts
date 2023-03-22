@@ -11,47 +11,76 @@ export class UsersService {
     }
 
     // ищет юзера по email, который уже есть в БД
-    async findUserByEmail (email: string){
-        return this.userRepository.findOne({
-            where: { email: email }
-        })
+    async findUserByEmail (email: string): Promise<User>{
+        try{
+            return this.userRepository.findOne({
+                where: { email: email }
+            })
+        }
+        catch (e){
+            throw new Error(e)
+        }
     }
 
     // хеширование пароля с помощью bcrypt
-    async hashPassword (password) {
-        return bcrypt.hash(password, 10)
+    async hashPassword (password: string): Promise<string> {
+        try{
+            return bcrypt.hash(password, 10)
+        }
+        catch (e){
+            throw new Error(e)
+        }
     }
     // добавление нового пользователя в БД
     async createUser(dto: CreateUserDTO): Promise<CreateUserDTO> {
-
-        dto.password = await this.hashPassword(dto.password)
-        const newUser = {
-            firstName: dto.firstName,
-            username: dto.username,
-            email: dto.email,
-            password: dto.password
+        try {
+            dto.password = await this.hashPassword(dto.password)
+            const newUser = {
+                firstName: dto.firstName,
+                username: dto.username,
+                email: dto.email,
+                password: dto.password
+            }
+            await this.userRepository.create(newUser)
+            return dto
         }
-        await this.userRepository.create(newUser)
-        return dto
+        catch (e) {
+            throw new Error(e)
+        }
     }
 
     // ищет юзера по email, который уже есть в БД, но исключаем пароль из данных, которые возвраащем
-    async publicUser (email: string) {
-        return this.userRepository.findOne({
-            where: { email: email },
-            attributes: {exclude: ['password']}
-        })
+    async publicUser (email: string): Promise<User> {
+        try{
+            return this.userRepository.findOne({
+                where: { email: email },
+                attributes: {exclude: ['password']}
+            })
+        }
+        catch (e) {
+            throw new Error(e)
+        }
     }
 
     // метод, обновляющий пользователя
     async updateUser (email: string, dto: UpdateUserDTO): Promise<UpdateUserDTO>{
-        await this.userRepository.update(dto, {where: {email}})
-        return dto
+        try{
+            await this.userRepository.update(dto, {where: {email}})
+            return dto
+        }
+        catch (e) {
+            throw new Error(e)
+        }
     }
     // метод, удаляющий пользователя
     async  deleteUser(email: string) {
-        await this.userRepository.destroy({where: {email}})
-        return true
+        try{
+            await this.userRepository.destroy({where: {email}})
+            return true
+        }
+        catch (e) {
+            throw new Error(e)
+        }
     }
 
     // Когда пользователь авторизован, у него есть токен доступа.

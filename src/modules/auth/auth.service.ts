@@ -13,31 +13,41 @@ export class AuthService {
 
     // Регистрация пользователя
     async registerUsers (dto: CreateUserDTO): Promise<CreateUserDTO>{
-        const existUser = await this.userService.findUserByEmail(dto.email)
-        if(existUser){
-            throw new BadRequestException(AppError.USER_EXIST)
+        try{
+            const existUser = await this.userService.findUserByEmail(dto.email)
+            if(existUser){
+                throw new BadRequestException(AppError.USER_EXIST)
+            }
+            return this.userService.createUser(dto)
         }
-        return this.userService.createUser(dto)
+        catch (e){
+            throw new Error(e)
+        }
     }
 
     // Аутентификация пользователя
     async loginUser(dto: UserLoginDTO): Promise<AuthUserResponse> {
-        // Проверка есть ли пользователя в базе данных
-        const existUser = await this.userService.findUserByEmail(dto.email)
-        if(!existUser){
-            throw new BadRequestException(AppError.USER_NOT_EXIST)
+        try{
+            // Проверка есть ли пользователя в базе данных
+            const existUser = await this.userService.findUserByEmail(dto.email)
+            if(!existUser){
+                throw new BadRequestException(AppError.USER_NOT_EXIST)
+            }
+            // Проверка идентичности пароля пользователя из бд и пароля, который ввёл пользователь
+            const validatePassword = await bcrypt.compare(dto.password, existUser.password)
+            if(!validatePassword){
+                throw new BadRequestException(AppError.WRONG_DATA)
+            }
+            const userData = {
+                name: existUser.firstName,
+                email: existUser.email
+            }
+            const token = await this.tokenService.generateJwtToken(userData)
+            const  user = await this.userService.publicUser(dto.email)
+            return {user, token}
         }
-        // Проверка идентичности пароля пользователя из бд и пароля, который ввёл пользователь
-        const validatePassword = await bcrypt.compare(dto.password, existUser.password)
-        if(!validatePassword){
-            throw new BadRequestException(AppError.WRONG_DATA)
+        catch (e){
+            throw new Error(e)
         }
-        const userData = {
-            name: existUser.firstName,
-            email: existUser.email
-        }
-        const token = await this.tokenService.generateJwtToken(userData)
-        const  user = await this.userService.publicUser(dto.email)
-        return {user, token}
     }
 }
