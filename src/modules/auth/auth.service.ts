@@ -12,13 +12,16 @@ export class AuthService {
     constructor(private readonly userService: UsersService, private readonly tokenService: TokenService) {}
 
     // Регистрация пользователя
-    async registerUsers (dto: CreateUserDTO): Promise<CreateUserDTO>{
+    async registerUsers (dto: CreateUserDTO): Promise<AuthUserResponse>{
         try{
             const existUser = await this.userService.findUserByEmail(dto.email)
             if(existUser){
                 throw new BadRequestException(AppError.USER_EXIST)
             }
-            return this.userService.createUser(dto)
+            await this.userService.createUser(dto)
+            const user = await this.userService.publicUser(dto.email)
+            const token = await this.tokenService.generateJwtToken(user)
+            return {user, token}
         }
         catch (e){
             throw new Error(e)
@@ -38,12 +41,8 @@ export class AuthService {
             if(!validatePassword){
                 throw new BadRequestException(AppError.WRONG_DATA)
             }
-            const userData = {
-                name: existUser.firstName,
-                email: existUser.email
-            }
-            const token = await this.tokenService.generateJwtToken(userData)
-            const  user = await this.userService.publicUser(dto.email)
+            const user = await this.userService.publicUser(dto.email)
+            const token = await this.tokenService.generateJwtToken(user)
             return {user, token}
         }
         catch (e){
