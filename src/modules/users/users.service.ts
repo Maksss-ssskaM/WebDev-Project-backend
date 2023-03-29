@@ -34,15 +34,21 @@ export class UsersService {
     // добавление нового пользователя в БД
     async createUser(dto: CreateUserDTO): Promise<CreateUserDTO> {
         try {
-            dto.password = await this.hashPassword(dto.password)
-            const newUser = {
-                firstName: dto.firstName,
-                username: dto.username,
-                email: dto.email,
-                password: dto.password
+            if(dto.email !== '' || dto.username !== '' || dto.firstName !== '' || dto.password !== '')
+            {
+                dto.password = await this.hashPassword(dto.password)
+                const newUser = {
+                    firstName: dto.firstName,
+                    username: dto.username,
+                    email: dto.email,
+                    password: dto.password
+                }
+                await this.userRepository.create(newUser)
+                return dto
             }
-            await this.userRepository.create(newUser)
-            return dto
+            else{
+                throw new BadRequestException(AppError.EMPTY_DATA)
+            }
         }
         catch (e) {
             throw new Error(e)
