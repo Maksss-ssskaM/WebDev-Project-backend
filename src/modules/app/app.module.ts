@@ -8,6 +8,7 @@ import configurations from '../../configurations';
 import {User} from "../users/models/user.model";
 import {AuthModule} from "../auth/auth.module";
 import {TokenModule} from "../token/token.module";
+import {GatewayModule} from "../gateway/gateway.module";
 @Module({
   imports: [
       ConfigModule.forRoot({
@@ -32,7 +33,8 @@ import {TokenModule} from "../token/token.module";
     }),
     UsersModule,
     AuthModule,
-    TokenModule],
+    TokenModule,
+    GatewayModule],
   controllers: [AppController],
   providers: [AppService],
 })
