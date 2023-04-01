@@ -4,6 +4,7 @@ import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import {CreateUserDTO, UpdateUserDTO} from "./dto";
 import {AppError} from "../../common/constants/errors";
+import {Watchlist} from "../watchlist/models/watchlist.model";
 
 @Injectable()
 export class UsersService {
@@ -60,7 +61,11 @@ export class UsersService {
         try{
             return this.userRepository.findOne({
                 where: { email: email },
-                attributes: {exclude: ['password']}
+                attributes: {exclude: ['password']},
+                include: {
+                    model: Watchlist,
+                    required: false
+                }
             })
         }
         catch (e) {
@@ -79,7 +84,7 @@ export class UsersService {
         }
     }
     // метод, удаляющий пользователя
-    async  deleteUser(email: string) {
+    async  deleteUser(email: string): Promise<boolean> {
         try{
             await this.userRepository.destroy({where: {email}})
             return true
