@@ -3,7 +3,7 @@ import { AppService } from '../app/app.service';
 import { InjectModel } from '@nestjs/sequelize';
 import { Reviews } from './models/reviews.models';
 import { ReviewsDTO } from './dto';
-import { CreateReviewResponse } from './responce';
+import { CreateReviewResponse } from './response';
 
 @Injectable()
 export class ReviewsService {
@@ -18,10 +18,12 @@ export class ReviewsService {
 
   async createReview(user, dto: ReviewsDTO): Promise<CreateReviewResponse> {
     const review = {
+      user: user.id,
       username: user.username,
       review: dto.review,
     };
     await this.reviewsService.create(review);
+    console.log(review);
     return review;
   }
 }

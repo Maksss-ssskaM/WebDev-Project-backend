@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { ReviewsDTO } from './dto';
 import { JwtAuthGuard } from '../../guards/jwt-guard';
-import { CreateReviewResponse } from './responce';
+import { CreateReviewResponse } from './response';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('reviews')
