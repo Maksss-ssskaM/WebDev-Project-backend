@@ -13,7 +13,8 @@ import { WatchlistService } from './watchlist.service';
 import { WatchListDTO } from './dto';
 import { JwtAuthGuard } from '../../guards/jwt-guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateAssetResponse } from './response';
+import { CreateAssetResponse, GetUserAssetsResponse } from './response';
+import { Watchlist } from './models/watchlist.model';
 
 @Controller('watchlist')
 export class WatchlistController {
@@ -29,6 +30,15 @@ export class WatchlistController {
   ): Promise<CreateAssetResponse> {
     const user = request.user;
     return this.watchlistService.createAsset(user, assetDto);
+  }
+
+  @ApiTags('API')
+  @ApiResponse({ status: 200, type: GetUserAssetsResponse })
+  @UseGuards(JwtAuthGuard)
+  @Get('get-elements')
+  getUserAssets(@Req() request): Promise<Watchlist[]> {
+    const user = request.user;
+    return this.watchlistService.getUserAssets(user.id);
   }
 
   @ApiTags('API')
