@@ -13,6 +13,8 @@ import { WatchlistModule } from '../watchlist/watchlist.module';
 import { Watchlist } from '../watchlist/models/watchlist.model';
 import { Reviews } from '../reviews/models/reviews.models';
 import { ReviewsModule } from '../reviews/reviews.module';
+import { NewsModule } from '../news/news.module';
+import { News } from '../news/models/news.models';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -32,7 +34,7 @@ import { ReviewsModule } from '../reviews/reviews.module';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [User, Watchlist, Reviews],
+        models: [User, Watchlist, Reviews, News],
       }),
     }),
     UsersModule,
@@ -41,6 +43,7 @@ import { ReviewsModule } from '../reviews/reviews.module';
     GatewayModule,
     WatchlistModule,
     ReviewsModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
