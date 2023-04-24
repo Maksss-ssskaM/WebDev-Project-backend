@@ -1,32 +1,18 @@
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateReviewResponse {
+export class GetNewsResponse {
   @ApiProperty()
   @IsNumber()
-  user: number;
+  name: string;
 
   @ApiProperty()
   @IsString()
-  username: string;
+  imageUrl: string;
 
   @ApiProperty()
   @IsString()
-  review: string;
-}
-
-export class GetReviewsResponse {
-  @ApiProperty()
-  @IsNumber()
-  user: number;
-
-  @ApiProperty()
-  @IsString()
-  username: string;
-
-  @ApiProperty()
-  @IsString()
-  review: string;
+  body: string;
 
   @ApiProperty()
   @IsString()
