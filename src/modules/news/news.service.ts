@@ -9,7 +9,7 @@ export class NewsService {
     private readonly newsService: typeof News,
   ) {}
 
-  async getNews() {
+  async getNews(): Promise<News[]> {
     return await this.newsService.findAll();
   }
 }

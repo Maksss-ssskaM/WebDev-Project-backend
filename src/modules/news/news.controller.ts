@@ -1,17 +1,21 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { JwtAuthGuard } from '../../guards/jwt-guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import { GetNewsResponse } from './response';
+import { News } from './models/news.models';
 
 @Controller('news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @ApiTags('API')
-  @ApiResponse({ status: 200 })
+  @ApiOperation({ summary: 'Get News' })
+  @ApiResponse({ status: 200, type: GetNewsResponse })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(JwtAuthGuard)
   @Get('get')
-  getReviews() {
+  getReviews(): Promise<News[]> {
     return this.newsService.getNews();
   }
 }

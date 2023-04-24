@@ -6,7 +6,7 @@ export class News extends Model {
   name: string;
 
   @Column
-  imageurl: string;
+  imageUrl: string;
 
   @Column
   body: string;

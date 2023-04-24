@@ -12,7 +12,7 @@ export class ReviewsService {
     private readonly reviewsService: typeof Reviews,
   ) {}
 
-  async getReviews() {
+  async getReviews(): Promise<Reviews[]> {
     return await this.reviewsService.findAll();
   }
 
