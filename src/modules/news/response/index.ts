@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class GetNewsResponse {
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   name: string;
 
   @ApiProperty()

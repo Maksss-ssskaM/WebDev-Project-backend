@@ -1,7 +1,6 @@
 import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { Watchlist } from '../../watchlist/models/watchlist.model';
 import { Reviews } from '../../reviews/models/reviews.models';
-import { Message } from '../../messages/models/message.models';
 
 @Table
 export class User extends Model {
@@ -28,10 +27,4 @@ export class User extends Model {
     onUpdate: 'CASCADE',
   })
   reviews: Reviews[];
-
-  // @HasMany(() => Message, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  // })
-  // messages: Message[];
 }
