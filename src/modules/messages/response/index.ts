@@ -1,18 +1,14 @@
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetNewsResponse {
+export class GetMessagesResponse {
   @ApiProperty()
   @IsString()
-  name: string;
+  username: string;
 
   @ApiProperty()
   @IsString()
-  imageUrl: string;
-
-  @ApiProperty()
-  @IsString()
-  body: string;
+  message: string;
 
   @ApiProperty()
   @IsString()

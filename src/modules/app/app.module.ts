@@ -8,13 +8,14 @@ import configurations from '../../configurations';
 import { User } from '../users/models/user.model';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
-import { GatewayModule } from '../gateway/gateway.module';
 import { WatchlistModule } from '../watchlist/watchlist.module';
 import { Watchlist } from '../watchlist/models/watchlist.model';
 import { Reviews } from '../reviews/models/reviews.models';
 import { ReviewsModule } from '../reviews/reviews.module';
 import { NewsModule } from '../news/news.module';
 import { News } from '../news/models/news.models';
+import { Message } from '../messages/models/message.models';
+import { MessageModule } from '../messages/message.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,16 +35,16 @@ import { News } from '../news/models/news.models';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [User, Watchlist, Reviews, News],
+        models: [User, Watchlist, Reviews, News, Message],
       }),
     }),
     UsersModule,
     AuthModule,
     TokenModule,
-    GatewayModule,
     WatchlistModule,
     ReviewsModule,
     NewsModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

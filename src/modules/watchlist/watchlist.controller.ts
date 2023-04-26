@@ -47,7 +47,10 @@ export class WatchlistController {
 
   @ApiTags('API')
   @ApiOperation({ summary: 'Delete Watchlist Asset' })
-  @ApiResponse({ status: 200 })
+  @ApiResponse({
+    status: 200,
+    description: 'Favorites list has been successfully deleted',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(JwtAuthGuard)
   @Delete()
