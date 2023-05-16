@@ -12,7 +12,7 @@ export class MessageController {
 
   @ApiTags('API')
   @ApiOperation({ summary: 'Get Messages' })
-  @ApiResponse({ status: 200, type: GetMessagesResponse })
+  @ApiResponse({ status: 200, type: [GetMessagesResponse] })
   @Get('get')
   getReviews(): Promise<Message[]> {
     return this.messageService.getMessages();

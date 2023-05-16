@@ -36,7 +36,7 @@ export class WatchlistController {
 
   @ApiTags('API')
   @ApiOperation({ summary: 'Get Watchlist Asset' })
-  @ApiResponse({ status: 200, type: GetUserAssetsResponse })
+  @ApiResponse({ status: 200, type: [GetUserAssetsResponse] })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(JwtAuthGuard)
   @Get('get-elements')
